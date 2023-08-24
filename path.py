@@ -8,8 +8,8 @@ WIN = pygame.display.set_mode((WIDTH, WIDTH))
 EMPTY = (255, 255, 255) # this is white
 VISIT = (128, 0, 128) # this is purple
 OBS = (0, 0, 0) # this is black
-END = (200, 230,100) # fix this color later
-BEGIN = (13, 44, 20) #i don't know what color it is, fix it later
+END = (0,0, 255) # fix this color later
+BEGIN = (255, 0, 0) #this is red color
 PATH =  (200, 100, 40)
 pygame.display.set_caption("A* Path Finding Algorithm")
 
@@ -51,7 +51,7 @@ class Node:
     
     def reset(self):
         self.color = EMPTY
-    #this is for figuring out mous click position
+    #this is for figuring out mouse click position
     def pos(self):
         return self.row, self.col
 
@@ -73,19 +73,37 @@ class Node:
 def make_grid(rows, width):
     length = width // rows
     grid = []
-    for i in rows:
-        add = []
-        for j in rows:
+    for i in range(rows):
+        grid.append([])
+        for j in range(rows):
             node = Node(i, j, length, rows)
+            grid[i].append(node)
+
+    return grid
 
 def draw_grid(win, rows, width):
     length = width // rows
-    for row in rows:
-        for col in rows:
-
+    for i in range(rows):
+        pygame.draw.line(win, OBS, (0, i * length), (width, i * length))
+        for j in range(rows):
+            pygame.draw.line(win, OBS, (j * length, 0), (j * length, width))
 
 def draw_all(win, grid, rows, width):
-    pass
+    #initialize the canvas to full white before drawing anything else
+    win.fill(EMPTY)
+    for row in grid:
+        for node in row:
+            node.draw(win)
+    draw_grid(win, rows, width)
+    pygame.display.update()
+
+#the x, y concept is little confusing, x mean col and y mean row, thus we need to swtich them
+def get_pos(pos, rows, width):
+    x, y = pos
+    length = width // rows
+    row, col = x // length, y // length
+    return row, col
+
 
 def main(win, width):
     ROWS = 50
@@ -94,10 +112,26 @@ def main(win, width):
     end = None
     running = True
     while running:
+        draw_all(win, grid, ROWS, width)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             #check when mouse is clicked. We have to change the node color
+            if pygame.mouse.get_pressed()[0]: #this is left click
+                pos = pygame.mouse.get_pos() 
+                row, col = get_pos(pos, ROWS, width)
+                node = grid[row][col]
+                if not start:
+                    node.mark_start()
+                    start = True
+                elif not end:
+                    node.mark_end()
+                    end = True
+                else:
+                    node.mark_block()
+            elif pygame.mouse.get_pressed()[2]: # this is right click
+                pass
+
 
 
     pygame.quit()
