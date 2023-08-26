@@ -121,16 +121,26 @@ def main(win, width):
                 pos = pygame.mouse.get_pos() 
                 row, col = get_pos(pos, ROWS, width)
                 node = grid[row][col]
-                if not start:
+                if not start and node != end:
                     start = node
                     node.mark_start()
-                elif not end:
+                elif not end and node != start:
                     end = node
                     node.mark_end()
-                else:
+                elif node != start and node != end:
                     node.mark_block()
             elif pygame.mouse.get_pressed()[2]: # this is right click
-                pass
+                pos = pygame.mouse.get_pos()
+                row, col = get_pos(pos, ROWS, width)
+                node = grid[row][col]
+                if node == start:
+                    start = None
+                    node.reset()
+                elif node == end:
+                    end = None
+                    node.reset()
+                else:
+                    node.reset()
 
 
 
