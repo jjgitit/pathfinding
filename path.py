@@ -64,7 +64,22 @@ class Node:
 
     
     def update_neighbors(self, grid):
-        pass
+        self.neighbors = []
+        #add upper node
+        if self.row > 0 and not grid[self.row -1][self.col].isblock():
+            self.neighbors.append(grid[self.row - 1][self.col])
+
+        #add lower node
+        if self.row < len(grid) - 1 and not grid[self.row + 1][self.col].is_block():
+            self.neighbors.append(grid[self.row + 1][self.col])
+
+        #add right node
+        if self.col < len(grid[0]) -1 and not grid[self.row][self.col + 1].is_block():
+            self.neighbors.append(grid[self.row][self.col + 1])
+
+        #add left node
+        if self.col > 0 and not grid[self.row][self.col - 1].is_block():
+            self.neighbors.append(grid[self.row][self.col - 1])
 
     def __lt__(self, other):
         return False
