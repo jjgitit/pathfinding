@@ -14,6 +14,7 @@ PATH =  (200, 100, 40)
 pygame.display.set_caption("A* Path Finding Algorithm")
 
 
+
 class Node:
     def __init__(self, row, col, width, total_rows):
         self.row = row
