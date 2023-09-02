@@ -1,7 +1,8 @@
-# Pathfinding Algorithm Visualizer using Pygame
+# Pathfinding Visualizer in Pygame
+Following path finding algorithems are demonstarted in this projects: A* Pathfinding, Dikskrah pathfinding
 
-# Concept Involved
-## H(n), heuristic function. This is just a rough estimate of distance between two points based on a certain formula which is Manhattan distance for this project.
-
-## add few things here
+#Install Pygame
+to install pygame, type the following in your terminal
+"pip3 install pygame"
+once you have successfully installed pygame, you will see the following message if installation is successfull.
 
