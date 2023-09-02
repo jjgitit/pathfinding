@@ -11,7 +11,8 @@ OBS = (0, 0, 0) # this is black
 END = (0,0, 255) # fix this color later
 BEGIN = (255, 0, 0) #this is red color
 PATH =  (200, 100, 40)
-pygame.display.set_caption("A* Path Finding Algorithm")
+MODE = 'RUN'
+pygame.display.set_caption("Path Finding Algorithm")
 
 
 
@@ -133,30 +134,33 @@ def main(win, width):
             if event.type == pygame.QUIT:
                 running = False
             #check when mouse is clicked. We have to change the node color
-            if pygame.mouse.get_pressed()[0]: #this is left click
-                pos = pygame.mouse.get_pos() 
-                row, col = get_pos(pos, ROWS, width)
-                node = grid[row][col]
-                if not start and node != end:
-                    start = node
-                    node.mark_start()
-                elif not end and node != start:
-                    end = node
-                    node.mark_end()
-                elif node != start and node != end:
-                    node.mark_block()
-            elif pygame.mouse.get_pressed()[2]: # this is right click
-                pos = pygame.mouse.get_pos()
-                row, col = get_pos(pos, ROWS, width)
-                node = grid[row][col]
-                if node == start:
-                    start = None
-                    node.reset()
-                elif node == end:
-                    end = None
-                    node.reset()
-                else:
-                    node.reset()
+            if MODE == "Run":
+                if pygame.mouse.get_pressed()[0]: #this is left click
+                    pos = pygame.mouse.get_pos() 
+                    row, col = get_pos(pos, ROWS, width)
+                    node = grid[row][col]
+                    if not start and node != end:
+                        start = node
+                        node.mark_start()
+                    elif not end and node != start:
+                        end = node
+                        node.mark_end()
+                    elif node != start and node != end:
+                        node.mark_block()
+                elif pygame.mouse.get_pressed()[2]: # this is right click
+                    pos = pygame.mouse.get_pos()
+                    row, col = get_pos(pos, ROWS, width)
+                    node = grid[row][col]
+                    if node == start:
+                        start = None
+                        node.reset()
+                    elif node == end:
+                        end = None
+                        node.reset()
+                    else:
+                        node.reset()
+            elif MODE == "help":
+                pass
 
 
 
