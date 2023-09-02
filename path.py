@@ -121,6 +121,13 @@ def get_pos(pos, rows, width):
     row, col = x // length, y // length
     return row, col
 
+def draw_help(win):
+    win.fill(EMPTY)
+
+    text = font.render('GeeksForGeeks', True, green, blue)
+    textRect = text.get_rect()
+    texRect.center = (WIDTH // 2, WIDTH // 2)
+    pygame.dislplay.update()
 
 def main(win, width):
     ROWS = 50
@@ -134,7 +141,7 @@ def main(win, width):
             if event.type == pygame.QUIT:
                 running = False
             #check when mouse is clicked. We have to change the node color
-            if MODE == "Run":
+            if MODE == "RUN":
                 if pygame.mouse.get_pressed()[0]: #this is left click
                     pos = pygame.mouse.get_pos() 
                     row, col = get_pos(pos, ROWS, width)
@@ -160,7 +167,7 @@ def main(win, width):
                     else:
                         node.reset()
             elif MODE == "help":
-                pass
+                draw_help(win)
 
 
 
