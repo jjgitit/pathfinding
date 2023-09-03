@@ -1,6 +1,7 @@
 import pygame
 import math
 from queue import PriorityQueue
+from algorithms.py import a_star, bfs, dfs
 
 WIDTH = 800
 WIN = pygame.display.set_mode((WIDTH, WIDTH))
