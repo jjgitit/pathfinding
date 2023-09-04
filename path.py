@@ -1,93 +1,108 @@
 import pygame
 import math
-from queue import PriorityQueue
-from algorithms.py import a_star, bfs, dfs
+from algorithms import a_star, bfs, dfs
 
 WIDTH = 800
+ROWS = 40
 WIN = pygame.display.set_mode((WIDTH, WIDTH))
-#Define colors for different types of nodes
-EMPTY = (255, 255, 255) # this is white
-VISIT = (128, 0, 128) # this is purple
-OBS = (0, 0, 0) # this is black
-END = (0,0, 255) # fix this color later
-BEGIN = (255, 0, 0) #this is red color
-PATH =  (200, 100, 40)
-MODE = 'RUN'
+ALG = "a_star"
+# Define colors for different types of nodes
+EMPTY = (255, 255, 255)  # this is white
+VISIT = (128, 0, 128)  # this is purple
+OBS = (0, 0, 0)  # this is black
+END = (0, 0, 255)  # fix this color later
+BEGIN = (255, 0, 0)  # this is red color
+PATH = (200, 100, 40)
+MODE = "RUN"
 pygame.display.set_caption("Path Finding Algorithm")
-
 
 
 class Node:
     def __init__(self, row, col, width, total_rows):
         self.row = row
         self.col = col
-        self. width = width
+        self.width = width
         self.total_rows = total_rows
         self.x = row * width
         self.y = col * width
-        self.neighbors = [] 
+        self.neighbors = []
         self.color = EMPTY
-        
+        self.g = float("inf")
+        self.h = float("inf")
+        self.f = float("inf")
+
     def mark_start(self):
         self.color = BEGIN
-    
+
     def mark_end(self):
-        self.color = END 
+        self.color = END
 
     def mark_block(self):
         self.color = OBS
 
+    def mark_visited(self):
+        self.color = VISIT
+
     def is_visited(self):
         return self.color == VISIT
-    
+
     def is_empty(self):
         return self.color == EMPTY
-    
+
     def is_block(self):
         return self.color == OBS
 
     def is_start(self):
         return self.color == BEGIN
-    
+
     def is_end(self):
-        return self.color == END 
-    
+        return self.color == END
+
     def reset(self):
         self.color = EMPTY
-    #this is for figuring out mouse click position
+
+    # this is for figuring out mouse click position
     def pos(self):
         return self.row, self.col
 
     def make_path(self):
         self.color = PATH
 
-   #this is drawing cubes on grib with colors 
+    # this is drawing cubes on grib with colors
     def draw(self, win):
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.width))
 
-    
     def update_neighbors(self, grid):
         self.neighbors = []
-        #add upper node
-        if self.row > 0 and not grid[self.row -1][self.col].isblock():
+        # add upper node
+        if self.row > 0 and not grid[self.row - 1][self.col].isblock():
             self.neighbors.append(grid[self.row - 1][self.col])
 
-        #add lower node
+        # add lower node
         if self.row < len(grid) - 1 and not grid[self.row + 1][self.col].is_block():
             self.neighbors.append(grid[self.row + 1][self.col])
 
-        #add right node
-        if self.col < len(grid[0]) -1 and not grid[self.row][self.col + 1].is_block():
+        # add right node
+        if self.col < len(grid[0]) - 1 and not grid[self.row][self.col + 1].is_block():
             self.neighbors.append(grid[self.row][self.col + 1])
 
-        #add left node
+        # add left node
         if self.col > 0 and not grid[self.row][self.col - 1].is_block():
             self.neighbors.append(grid[self.row][self.col - 1])
 
     def __lt__(self, other):
         return False
 
-#making 2-D list for all nodes on the grid
+
+# this is a heuristic function which calculates cooridinate distance
+# we can change this to Mahhattan distance formula
+def h(start, end):
+    x1, y1 = start.row, start.col
+    x2, y2 = end.row, end.col
+    return abs(x1 - x2) + abs(y1 - y2)
+
+
+# making 2-D list for all nodes on the grid
 def make_grid(rows, width):
     length = width // rows
     grid = []
@@ -99,6 +114,7 @@ def make_grid(rows, width):
 
     return grid
 
+
 def draw_grid(win, rows, width):
     length = width // rows
     for i in range(rows):
@@ -106,8 +122,9 @@ def draw_grid(win, rows, width):
         for j in range(rows):
             pygame.draw.line(win, OBS, (j * length, 0), (j * length, width))
 
+
 def draw_all(win, grid, rows, width):
-    #initialize the canvas to full white before drawing anything else
+    # initialize the canvas to full white before drawing anything else
     win.fill(EMPTY)
     for row in grid:
         for node in row:
@@ -115,36 +132,38 @@ def draw_all(win, grid, rows, width):
     draw_grid(win, rows, width)
     pygame.display.update()
 
-#the x, y concept is little confusing, x mean col and y mean row, thus we need to swtich them
+
+# the x, y concept is little confusing, x mean col and y mean row, thus we need to swtich them
 def get_pos(pos, rows, width):
     x, y = pos
     length = width // rows
     row, col = x // length, y // length
     return row, col
 
+
 def draw_help(win):
     win.fill(EMPTY)
+    pygame.display.update()
 
-    text = font.render('GeeksForGeeks', True, green, blue)
-    textRect = text.get_rect()
-    texRect.center = (WIDTH // 2, WIDTH // 2)
-    pygame.dislplay.update()
 
-def main(win, width):
-    ROWS = 50
+def main(win, width, MODE):
     grid = make_grid(ROWS, width)
     start = None
     end = None
     running = True
     while running:
-        draw_all(win, grid, ROWS, width)
+        print()
+        if MODE == "RUN":
+            draw_all(win, grid, ROWS, width)
+        elif MODE == "HELP":
+            draw_help(win)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            #check when mouse is clicked. We have to change the node color
+            # check when mouse is clicked. We have to change the node color
             if MODE == "RUN":
-                if pygame.mouse.get_pressed()[0]: #this is left click
-                    pos = pygame.mouse.get_pos() 
+                if pygame.mouse.get_pressed()[0]:  # this is left click
+                    pos = pygame.mouse.get_pos()
                     row, col = get_pos(pos, ROWS, width)
                     node = grid[row][col]
                     if not start and node != end:
@@ -155,7 +174,7 @@ def main(win, width):
                         node.mark_end()
                     elif node != start and node != end:
                         node.mark_block()
-                elif pygame.mouse.get_pressed()[2]: # this is right click
+                elif pygame.mouse.get_pressed()[2]:  # this is right click
                     pos = pygame.mouse.get_pos()
                     row, col = get_pos(pos, ROWS, width)
                     node = grid[row][col]
@@ -167,11 +186,47 @@ def main(win, width):
                         node.reset()
                     else:
                         node.reset()
-            elif MODE == "help":
-                draw_help(win)
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_h:
+                        MODE = "HELP"
+                        if event.key == pygame.K_a:
+                            ALG = "a_star"
+                        elif event.key == pygame.K_b:
+                            ALG = "bfs"
+                        elif event.key == pygame.K_c:
+                            ALG = "dfs"
+                        if event.key == pygame.K_q:
+                            MODE = "RUN"
+                    elif event.key == pygame.K_SPACE and start and end and MODE == "RUN":
+                        if ALG == "a_star":
+                            a_star(
+                                lambda: draw_all(win, grid, ROWS, width),
+                                grid,
+                                start,
+                                end,
+                            )
+                        elif ALG == "bfs":
+                            bfs(
+                                lambda: draw_all(win, grid, ROWS, width),
+                                grid,
+                                start,
+                                end,
+                            )
+                        elif ALG == "dfs":
+                            dfs(
+                                lambda: draw_all(win, grid, ROWS, width),
+                                grid,
+                                start,
+                                end,
+                            )
+            if MODE == "HELP":
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_q:
+                        MODE = "RUN"
 
 
 
     pygame.quit()
 
-main(WIN, WIDTH)
+
+main(WIN, WIDTH, MODE)
