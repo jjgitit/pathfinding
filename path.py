@@ -64,6 +64,8 @@ class Node:
 
     def reset(self):
         self.color = EMPTY
+        self.f = float('inf')
+        self.g = float('inf')
 
     # this is for figuring out mouse click position
     def pos(self):
@@ -152,95 +154,43 @@ def draw_help(win):
     win.fill(EMPTY)
     pygame.display.update()
 
+def a_star(draw, start, end):
+    count = 0
+    cameFrom = {}
+    openSet = PriorityQueue()
+    openSet.put((start.f, count, start))
+    visit = {start} #this helps us which nodes are currently in openSet 
+    start.f = h(start, end)
+    start.g = 0
+    while not openSet.empty():
+        #ensuring we can quit anytime we want
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+        cur = openSet.get()[2] # this pops out smallest node in the queue
+        visit.remove(cur)
+        if cur == end:
+            reconstruct_path(cameFrom, cur, draw)
+            end.mark_end()
+            return True
+        for neigh in cur.neighbors:
+            temp_gscore = cur.g + 1 # value one is the weight from one node to the other
+            if temp_gscore < neigh.g:
+                neigh.g = temp_gscore
+                cameFrom[neigh] = cur
+                neigh.f = temp_gscore + h(neigh, end)
+                if neigh not in visit:
+                    visit.add(neigh)
+                    count += 1
+                    openSet.put((neigh.f,count, neigh))
+                    neigh.mark_open()
+        draw()
 
+        if cur != start:
+            cur.mark_closed()
+                    
 
-# def a_star(draw, start, end):
-#     openSet = PriorityQueue()
-#     visited = {start}
-#     cameFrom = {}
-#     start.g = 0
-#     start.f = h(start, end)
-#     openSet.put((start.f, start))
-#     while not openSet.empty():
-#         #just in case something goes wrong, I can quit
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 pygame.quit()
-#         cur = openSet.get()[1]
-#         visited.remove(cur)
-#         if cur == end:
-#             #redraw end node over the path for clarity
-#             end.mark_end()
-#             return reconstruct_path(cameFrom, cur,draw)
-#         for neighbor in cur.neighbors:
-#             temp_gScore = cur.g + 1 #we are assuming that each path in the grid is cost 1
-#             if temp_gScore < neighbor.g:
-#                 neighbor.g = temp_gScore
-#                 neighbor.f = temp_gScore + h(neighbor, end)
-#                 cameFrom[neighbor] = cur
-#                 if neighbor not in visited:
-#                     visited.add(neighbor)
-#                     openSet.put((neighbor.f, neighbor))
-#                     neighbor.mark_open()
-#         draw()
-#         if cur != start:
-#             cur.mark_closed()
-#
-#     return False
-
-def a_star(draw, grid, start, end):
-	count = 0
-	open_set = PriorityQueue()
-	open_set.put((0, count, start))
-	came_from = {}
-	g_score = {spot: float("inf") for row in grid for spot in row}
-	g_score[start] = 0
-	f_score = {spot: float("inf") for row in grid for spot in row}
-	f_score[start] = h(start, end)
-
-	open_set_hash = {start}
-
-	while not open_set.empty():
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				pygame.quit()
-
-		current = open_set.get()[2]
-		open_set_hash.remove(current)
-
-		if current == end:
-			reconstruct_path(came_from, end, draw)
-			end.mark_end()
-			return True
-
-		for neighbor in current.neighbors:
-			temp_g_score = g_score[current] + 1
-
-			if temp_g_score < g_score[neighbor]:
-				came_from[neighbor] = current
-				g_score[neighbor] = temp_g_score
-				f_score[neighbor] = temp_g_score + h(neighbor, end)
-				if neighbor not in open_set_hash:
-					count += 1
-					open_set.put((f_score[neighbor], count, neighbor))
-					open_set_hash.add(neighbor)
-					neighbor.mark_open()
-
-		draw()
-
-		if current != start:
-			current.mark_closed()
-
-	return False
-
-
-
-def dfs(draw, start, end):
-    pass
-
-def bfs(draw, start, end):
-    pass
-
+    return False
 
 def main(win, width, MODE, ALG):
     grid = make_grid(ROWS, width)
@@ -284,6 +234,11 @@ def main(win, width, MODE, ALG):
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_h:
                         MODE = "HELP"
+                    if event.key == pygame.K_r:
+                        start, end = None, None
+                        for row in grid:
+                            for node in row:
+                                node.reset()
                     if event.key == pygame.K_SPACE and start and end and MODE == "RUN":
                         for row in grid:
                             for node in row:
@@ -291,7 +246,6 @@ def main(win, width, MODE, ALG):
                         if ALG == "a_star":
                             a_star(
                                 lambda: draw_all(win, grid, ROWS, width),
-                                grid,
                                 start,
                                 end,
                             )
