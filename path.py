@@ -12,9 +12,9 @@ ALG = "a_star"
 EMPTY = (255, 255, 255)  # this is white
 VISIT = (128, 0, 128)  # this is purple
 OBS = (0, 0, 0)  # this is black
-END = (5, 13, 255)  # fix this color later
+END = (5, 13, 255)  # this is blue color for now
 BEGIN = (255, 0, 0)  # this is red color
-PATH = (200, 100, 40)
+PATH = (200, 100, 40) #this is brown color for now
 MODE = "RUN"
 pygame.display.set_caption("Path Finding Algorithm")
 

@@ -1,4 +1,5 @@
 from queue import PriorityQueue
+from typing import Deque
 
 # def a_star(draw, start, end):
 #     count = 0
@@ -42,6 +43,12 @@ from queue import PriorityQueue
 
 
 def bfs(draw, grid, start, end):
+    rows = len(grid)
+    cols = len(grid[0])
+    direction = [[0, -1], [0, 1], [1, 0], [-1, 0]]
+    q = []
+    visit = set()
+    q.append()
     pass
 
 def dfs(draw, grid, start, end):
