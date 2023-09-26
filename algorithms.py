@@ -52,6 +52,12 @@ def bfs(draw, grid, start, end):
     pass
 
 def dfs(draw, grid, start, end):
-    pass
-
+    rows = len(grid)
+    cols = len(grid[0])
+    visit = set()
+    if start == end:
+        return True
+    for neig in start.neighbors:
+        if neigh not in visit:
+            dfs(draw, grid, neigh, end)
 
