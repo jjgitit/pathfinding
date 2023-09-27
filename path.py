@@ -16,7 +16,7 @@ END = (5, 13, 255)  # this is blue color for now
 BEGIN = (255, 0, 0)  # this is red color
 PATH = (200, 100, 40) #this is brown color for now
 MODE = "RUN"
-pygame.display.set_caption("Path Finding Algorithm")
+pygame.display.set_caption("PathFinding Algorithm")
 
 
 class Node:
@@ -152,6 +152,14 @@ def reconstruct_path(cameFrom, cur, draw):
 
 def draw_help(win):
     win.fill(EMPTY)
+    font = pygame.font.Font('Arial', 30)
+    a_star_text = font.render('A Star Alg', True, black, white)
+    # bfs_text = font.render('BFS', True, black, white)
+    # dfs_text = font.render('DFS', True, black, white)
+    star_textbox = a_star_text.get_rect()
+    bfs_textbox = bfs_text.get_rect()
+    dfs_textbox = dfs_text.get_rect()
+    star_textbox.center = (200, 200)
     pygame.display.update()
 
 def a_star(draw, start, end):
