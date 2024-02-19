@@ -157,8 +157,8 @@ def draw_help(win):
     # bfs_text = font.render('BFS', True, black, white)
     # dfs_text = font.render('DFS', True, black, white)
     star_textbox = a_star_text.get_rect()
-    bfs_textbox = bfs_text.get_rect()
-    dfs_textbox = dfs_text.get_rect()
+    # bfs_textbox = bfs_text.get_rect()
+    # dfs_textbox = dfs_text.get_rect()
     star_textbox.center = (200, 200)
     pygame.display.update()
 
