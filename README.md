@@ -2,6 +2,7 @@
 # PathFinder Visualizer
 This project aims to visually demonstrate pathfinding algorithms(default : A* Algorithm). It shows current position and paths that are currently being considered.
 
+
 # Table of Content
 * [Technologies-and-setup](#Technologies-and-setup)
 * [Features](#Features)
@@ -21,7 +22,7 @@ If you see the latest pygame version on your terminal, we are good to go now.
 
 # Features
 To get started, right click to set a starting point and end point. After setting these two positions, you can right-click to set barriers around the grid. Pathfiding Algorithm will find the shortest distance going around barriers if obstructed.
-* A* Algorithm : explain what it is
+To run the selected algorithm, press 'Space'. Once pathfinding algorithm is done, press 'r' to reset nodes to initial empty state.
 
 
 ## Todo 
