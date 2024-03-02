@@ -1,7 +1,8 @@
 
 # PathFinder Visualizer
 This project aims to visually demonstrate pathfinding algorithms(default : A* Algorithm). It shows current position and paths that are currently being considered. At the end, it shows the shortest path from starting node to end node.  
-https://github.com/jjgitit/pathfinding/assets/132883866/7271c387-f123-4cc2-a924-106295eb883f
+![pathfinding](https://github.com/jjgitit/pathfinding/assets/132883866/d41e7863-90ac-41c9-8453-f26a710eef26)  
+
 
 
 # Table of Content
