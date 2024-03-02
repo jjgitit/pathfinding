@@ -10,11 +10,12 @@ WIN = pygame.display.set_mode((WIDTH, WIDTH))
 ALG = "a_star"
 # Define colors for different types of nodes
 EMPTY = (255, 255, 255)  # this is white
-VISIT = (128, 0, 128)  # this is purple
+VISIT = (174, 214, 220) #lightblue node that is already visited
 OBS = (0, 0, 0)  # this is black
 END = (5, 13, 255)  # this is blue color for now
 BEGIN = (255, 0, 0)  # this is red color
-PATH = (200, 100, 40) #this is brown color for now
+FINAL = (244,137,139) #pink, this is a node that is being considered as one of current node's neighbor
+PATH = (0,21,79) #dark navy
 MODE = "RUN"
 pygame.display.set_caption("PathFinding Algorithm")
 
@@ -46,6 +47,9 @@ class Node:
 
     def mark_open(self):
         self.color = PATH
+
+    def mark_path(self):
+        self.color = FINAL
 
     def is_closed(self):
         return self.color == VISIT
@@ -146,8 +150,13 @@ def get_pos(pos, rows, width):
     row, col = x // length, y // length
     return row, col
 
+
+#we are traversing in reverse order to mark path on top of paths alg visualized (end -> start)
 def reconstruct_path(cameFrom, cur, draw):
-    pass
+    while cur in cameFrom:
+        cur = cameFrom[cur]
+        cur.mark_path()
+        draw()
 
 
 def draw_help(win):
@@ -178,8 +187,9 @@ def a_star(draw, start, end):
         cur = openSet.get()[2] # this pops out smallest node in the queue
         visit.remove(cur)
         if cur == end:
-            reconstruct_path(cameFrom, cur, draw)
+            reconstruct_path(cameFrom, cur, draw) #redrawing the final path on top of explored nodes
             end.mark_end()
+            start.mark_start()
             return True
         for neigh in cur.neighbors:
             temp_gscore = cur.g + 1 # value one is the weight from one node to the other
