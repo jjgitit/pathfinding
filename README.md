@@ -1,7 +1,8 @@
 
 # PathFinder Visualizer
 This project aims to visually demonstrate pathfinding algorithms(default : A* Algorithm). It shows current position and paths that are currently being considered. At the end, it shows the shortest path from starting node to end node.  
-![pathfinding](https://github.com/jjgitit/pathfinding/assets/132883866/d41e7863-90ac-41c9-8453-f26a710eef26)  
+![pathfinding](https://github.com/jjgitit/pathfinding/assets/132883866/52e12760-7a9f-40bd-bf25-f5e076507f3b)  
+
 
 
 
@@ -12,7 +13,8 @@ This project aims to visually demonstrate pathfinding algorithms(default : A* Al
 
 # Technologies and Setup
 * Python 3.11.5
-* Pygame 2.5.1
+* Pygame 2.5.1  
+
 PathFinding Visualizer requires Pygame. To install Pygame, you must have Python installed in your system. To check if Python is installed,  
 `python3 --version`  
 If your terminal does not raise any error and displays the version of your Python, it means Python3 is installed on your environment.
