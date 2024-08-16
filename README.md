@@ -34,6 +34,7 @@ To run the selected algorithm, press 'Space'. Once pathfinding algorithm is done
 * Depth First Search(DFS)
 * Breath First Search(BFS)
 * Dijkstra's Algorithm
+* Help Page or more intuitive design
 
 # Inspiration
 This project is inspirted by numerous pathfinding visualization projects on Youtube. Besides updating on more pathfinding algorithms mentioned in Todo, in the furture I could update and customize weights between nodes to more closely reflect real world mapping system. 
